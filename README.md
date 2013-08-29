@@ -21,28 +21,9 @@ Fireball
 
 TODO
 =================
+* Convert help file to wiki page in github
 * Support rethinkdb proxy deployments
 * Support other OS's
-
-Configuration Options
-=====================
-
-Playbook Options
-----------------
-``` rethinkdb_cluster=true ```  
-Description: Will join all rethinkdb servers with eachother. It's a shortcut to typing out the indiviual joins=[] option for each server. See inventory_cluster_example file.  
-Usage: Use in global section  
-Default: false
-
-``` rethinkdb_sshtunnel=true ```  
-Description: Will use an ssh tunnel for all cluster communications. Installs and uses autossh for persistent connections. Generates keys for each server and distributes accordingly. Only tested with all rethinkdb_serve_hosts bound to 127.0.0.1. Requires each rethinkdb_serve_host to have a unique rethinkdb_cluster_port. See inventory_cluster_tunnel_example file.  
-Usage: Use in global section  
-Default: false
-
-RethinkDB Options
------------------
-rethinkdb_runuser
-	rethinkdb_runuser=someuser
 
 
 
