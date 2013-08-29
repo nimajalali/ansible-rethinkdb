@@ -1,0 +1,17 @@
+# The site wide list of rethinkdb servers
+
+# The list of servers where rethinkdb serve will run.
+[rethinkdb_serve_hosts]
+rethinkdb1 ansible_ssh_host=1.1.1.1 rethinkdb_cluster_port=29015 rethinkdb_joins=
+rethinkdb2 ansible_ssh_host=1.1.1.2 rethinkdb_cluster_port=29025 
+rethinkdb3 ansible_ssh_host=1.1.1.3 rethinkdb_cluster_port=29035
+rethinkdb4 ansible_ssh_host=1.1.1.4 rethinkdb_cluster_port=29045
+
+# Global options for rethinkdb_serve_hosts.
+[rethinkdb_serve_hosts:vars]
+rethinkdb_instance_name=instance0
+rethinkdb_directory=/data/rethinkdb
+
+# All rethinkdb server
+[rethinkdb_all_hosts:children]
+rethinkdb_serve_hosts
