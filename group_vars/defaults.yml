@@ -1,0 +1,12 @@
+## DO NOT EDIT
+## Custom variables should be set with the hosts in the inventory file 
+
+## The global variable file for the rethinkdb installation
+
+rethinkdb_user: rethinkdb
+rethinkdb_group: rethinkdb
+
+rethinkdb_directory: /var/lib/rethinkdb/default
+
+rethinkdb_cluster: false
+rethinkdb_sshtunnel: false

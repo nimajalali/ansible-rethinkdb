@@ -1,0 +1,15 @@
+---
+- name: Get rethinkdb repo
+  get_url: dest=/tmp/rethinkdb.repo  url=http://download.rethinkdb.com/centos/6/x86_64/rethinkdb.repo
+
+- name: Install rethinkdb repo
+  command: cp /tmp/rethinkdb.repo /etc/yum.repos.d/rethinkdb.repo
+
+- name: Install the rethinkdb package
+  yum: name=rethinkdb state=installed
+
+- name: Create the rethinkdb user
+  user: name={{ rethinkdb_user }}
+
+- name: Create the rethinkdb group
+  group: name={{ rethinkdb_group }}

@@ -1,0 +1,109 @@
+#
+# RethinkDB instance configuration sample
+#
+# - Give this file the extension .conf and put it in /etc/rethinkdb/instances.d in order to enable it.
+# - See http://www.rethinkdb.com/docs/guides/startup/ for the complete documentation
+# - Uncomment an option to change its value.
+#
+
+###############################
+## RethinkDB configuration
+###############################
+
+### Process options
+
+## User and group used to run rethinkdb
+## Command line default: do not change user or group
+## Init script default: rethinkdb user and group
+# runuser=rethinkdb
+# rungroup=rethinkdb
+{% if rethinkdb_runuser %}
+runuser={{ rethinkdb_runuser }}
+{% endif %}
+{% if rethinkdb_rungroup %}
+rungroup={{ rethinkdb_rungroup }}
+{% endif %}
+
+## Stash the pid in this file when the process is running
+## Command line default: none
+## Init script default: /var/run/rethinkdb/<name>/pid_file (where <name> is the name of this config file without the extension)
+# pid-file=/var/run/rethinkdb/rethinkdb.pid
+{% if rethinkdb_pid_file %}
+pid-file={{ rethinkdb_pid_file }}
+{% endif %}
+
+
+### File path options
+
+## Directory to store data and metadata
+## Command line default: ./rethinkdb_data
+## Init script default: /var/lib/rethinkdb/<name>/ (where <name> is the name of this file without the extension)
+# directory=/var/lib/rethinkdb/default
+{% if rethinkdb_directory %}
+directory={{ rethinkdb_directory }}/{{ rethinkdb_instance_name }}
+{% endif %}
+
+### Network options
+
+## Address of local interfaces to listen on when accepting connections
+## May be 'all' or an IP address, loopback addresses are enabled by default
+## Default: all local addresses
+# bind=127.0.0.1
+{% if rethinkdb_bind %}
+bind={{ rethinkdb_bind }}
+{% endif %}
+
+## The port for rethinkdb protocol for client drivers
+## Default: 28015 + port-offset
+# driver-port=28015
+{% if rethinkdb_driver_port %}
+driver-port={{ rethinkdb_driver_port }}
+{% endif %}
+
+## The port for receiving connections from other nodes
+## Default: 29015 + port-offset
+# cluster-port=29015
+{% if rethinkdb_cluster_port %}
+cluster-port={{ rethinkdb_cluster_port }}
+{% endif %}
+
+## The host:port of a node that rethinkdb will connect to
+## This option can be specified multiple times.
+## Default: none
+# join=example.com:29015
+{% if rethinkdb_cluster %}
+{% for host in groups['rethinkdb_servers'] %}
+{% if host != inventory_hostname %}
+join=localhost:{{ hostvars[host]['rethinkdb_cluster_port'] }}
+{% endif %}
+{% endfor %}
+{% elif rethinkdb_joins %}
+{% for join in rethinkdb_joins %}
+join={{ join }}
+{% endfor %}
+{% endif %}
+
+## All ports used locally will have this value added
+## Default: 0
+# port-offset=0
+{% if rethinkdb_port_offset %}
+port-offset={{ rethinkdb_port_offset }}
+{% endif %}
+
+### Web options
+
+## Port for the http admin console
+## Default: 8080 + port-offset
+# http-port=8080
+{% if rethinkdb_http_port %}
+http-port={{ rethinkdb_http_port }}
+{% endif %}
+
+### CPU options
+
+## The number of cores to use
+## Default: total number of cores of the CPU
+# cores=2
+{% if rethinkdb_cores %}
+cores={{ rethinkdb_cores }}
+{% endif %}

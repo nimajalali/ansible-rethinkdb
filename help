@@ -1,0 +1,81 @@
+
+# Global options for rethinkdb-proxy-servers.
+[rethinkdb-proxy-servers:vars]
+cluster=true
+sshtunnel=true
+
+###############################
+## RethinkDB options
+###############################
+## Available options. Set using key=value format.
+## All options are optional. If not set the rethinkdb init script default value will be used.
+
+## rethinkdb_runuser
+## rethinkdb_rungroup
+## User and group used to run rethinkdb
+## Init script default: rethinkdb user and group
+## e.g. rethinkdb-node1 runuser=jack rungroup=people
+
+## rethinkdb_pid-file
+## Stash the pid in this file when the process is running
+## Init script default: /var/run/rethinkdb/<name>/pid_file (where <name> is the name of this config file without the extension)
+## e.g. rethinkdb-node1 pid-file=/companyx/rethinkdb/pid_file
+
+## rethinkdb_directory
+## Directory to store data and metadata
+## Init script default: /var/lib/rethinkdb/<name>/ (where <name> is the name of this file without the extension)
+## e.g. rethinkdb-node1 directory=/data/rethinkdb/companyx/
+
+## rethinkdb_bind
+## Address of local interfaces to listen on when accepting connections
+## May be 'all' or an IP address, loopback addresses are enabled by default
+## Default: all local addresses
+## e.g. rethinkdb-node1 bind=127.0.0.1
+
+## rethinkdb_driver-port
+## The port for rethinkdb protocol for client drivers
+## Default: 28015 + port-offset
+## e.g. rethinkdb-node1 driver-port=28015
+
+## rethinkdb_cluster-port
+## The port for receiving connections from other nodes
+## Default: 29015 + port-offset
+## e.g. rethinkdb-node1 cluster-port=29015
+
+## rethinkdb_port-offset
+## All ports used locally will have this value added
+## Default: 0
+## e.g. rethinkdb-node1 port-offset=0
+
+## rethinkdb_http-port
+## Port for the http admin console
+## Default: 8080 + port-offset
+## e.g. rethinkdb-node1 http-port=8080
+
+## rethinkdb_cores
+## The number of cores to use
+## Default: total number of cores of the CPU
+## e.g. rethinkdb-node1 cores=2
+
+## rethinkdb_joins
+## The host:port of a node that rethinkdb will connect to
+## *This option is set using key=array format
+## Default: none
+## e.g. rethinkdb-node1 joins=[rethinkdb-node2:29025, rethinkdb-node3:29035]
+
+
+###############################
+## Playbook options
+###############################
+## rethinkdb_cluster
+## cluster=true will join all rethinkdb servers with eachother. It's a shortcut to typing out the indiviual joins=[] option for each server
+## Use in global section
+## Default: false
+
+## rethinkdb_sshtunnel
+## sshtunnel=true will use an ssh tunnel for all cluster communications. Installs and uses autossh and ssh port forwarding.
+## Generates custom certs for each server and distributes accordingly.
+## Only tested with all rethinkdb processes bound to 127.0.0.1 and hosts file pointing all rethinkdb servers to 127.0.0.1
+## Requires each rethinkdb server to have a unique cluster-port.
+## Use in global section
+## Default: false

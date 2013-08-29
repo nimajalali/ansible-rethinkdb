@@ -1,0 +1,3 @@
+---
+- name: restart rethinkdb
+  service: name=rethinkdb state=restarted

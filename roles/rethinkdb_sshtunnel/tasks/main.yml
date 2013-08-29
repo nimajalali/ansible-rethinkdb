@@ -1,0 +1,50 @@
+---
+- name: Get epel-repo rpm
+  get_url: dest=/tmp/epel-release.rpm  url=http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm
+
+- name: Install epel-repo rpm
+  yum: pkg=/tmp/epel-release.rpm state=installed
+
+- name: Install the autossh package
+  yum: name=autossh state=installed
+
+- name: Create home directory for rethinkdb user
+  file: dest=/home/{{ rethinkdb_user }}/ mode=755 owner={{ rethinkdb_user }} group={{ rethinkdb_group }} state=directory
+
+- name: Create .ssh directory for rethinkdb user
+  file: path=/home/{{ rethinkdb_user }}/.ssh/ mode=755 owner={{ rethinkdb_user }} group={{ rethinkdb_group }} state=directory
+
+- name: Check if a private key already exists for rethinkdb_user
+  action: shell test -f /home/{{ rethinkdb_user }}/.ssh/id_rsa.pub && echo "exists" || echo ""
+  register: key_exists
+
+- name: Generate private/public key for ssh tunnel
+  command: ssh-keygen -f /home/rethinkdb/.ssh/id_rsa -t rsa -N ''
+  when_string: ${key_exists.stdout} != "exists"
+
+- name: Copy public key
+  command: cat /home/{{ rethinkdb_user }}/.ssh/id_rsa.pub
+  register: pub_key
+
+- name: Distribute public key to all rethinkdb_serve_hosts
+  delegate_to: ${item}
+  authorized_key: user={{ rethinkdb_user }} key="{{ pub_key.stdout }}"
+  with_items: groups['rethinkdb_serve_hosts']
+
+- name: Remove all rethinkdb_serve_hosts from known_hosts. Prevents multiple entries
+  command: ssh-keygen -f /home/{{ rethinkdb_user }}/.ssh/known_hosts -R {{ hostvars[item]['ansible_ssh_host'] }}
+  with_items: groups['rethinkdb_serve_hosts']
+
+- name: Add all rethinkdb_serve_hosts to known_hosts
+  command: sh -c 'ssh-keyscan -H {{ hostvars[item]['ansible_ssh_host'] }} >> /home/{{ rethinkdb_user }}/.ssh/known_hosts'
+  with_items: groups['rethinkdb_serve_hosts']
+
+- name: Set owner of user rethinkdb ssh directory
+  file: path=/home/{{ rethinkdb_user }}/.ssh/ owner={{ rethinkdb_user }} group={{ rethinkdb_group }} state=directory recurse=yes
+
+- name: Enable rethinkdb user login
+  command: chsh -s /bin/bash {{ rethinkdb_user }}
+
+- name: Create the ssh tunnel configuration
+  template: src=rethinkdb-tunnel.conf.j2 dest=/etc/init/rethinkdb-tunnel.conf
+  notify: restart rethinkdb
