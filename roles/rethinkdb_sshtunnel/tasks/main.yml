@@ -1,6 +1,11 @@
 ---
-- name: Get epel-repo rpm
+- name: get epel-repo rpm CentOS6 i386 or i686
   get_url: dest=/tmp/epel-release.rpm  url=http://download.fedoraproject.org/pub/epel/6/i386/epel-release-6-8.noarch.rpm
+  when: ansible_os_family == 'RedHat' and ansible_distribution_version|int >= 6 and ansible_machine != "x86_64"
+
+- name: get epel-repo rpm CentOS6 x86_64
+  get_url: dest=/tmp/epel-release.rpm  url=http://download.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+  when: ansible_os_family == 'RedHat' and ansible_distribution_version|int >= 6 and ansible_machine == "x86_64"
 
 - name: Install epel-repo rpm
   yum: pkg=/tmp/epel-release.rpm state=installed

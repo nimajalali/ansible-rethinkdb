@@ -3,7 +3,7 @@ ansible-rethinkdb
 
 [Ansible](http://www.ansibleworks.com/) playbook for [RethinkDB](http://rethinkdb.com/). 
 
-Supports single node and clustered configurations. Also has support for ssh tunneling, using autossh, between nodes. Works with Centos 6 x86_64.
+Supports single node and clustered configurations. Also has support for ssh tunneling, using autossh, between nodes. Works with 32-bit and 64-bit CentOS 6.
 
 Usage Prereqs
 ================
@@ -18,7 +18,7 @@ Usage
 
 TODO
 =================
-* Convert help file to wiki page in github
+* Convert help file to wiki page on github
 * Support rethinkdb proxy deployments
-* Support other OS's
+* Support Ubuntu
 * Add option to install nginx and setup a password protected proxy for rethinkdb's web interface

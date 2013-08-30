@@ -1,5 +1,5 @@
 ## DO NOT EDIT
-## Custom variables should be set with the hosts in the inventory file 
+## Custom variables should be set with the hosts in the inventory file
 
 rethinkdb_user: rethinkdb
 rethinkdb_group: rethinkdb

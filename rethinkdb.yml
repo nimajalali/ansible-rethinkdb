@@ -1,20 +1,14 @@
 ---
-- hosts: rethinkdb_all_hosts
+- hosts: all
   roles:
   - role: rethinkdb_common
-  handlers:
-  - include: handlers/main.yml
 
 - hosts: rethinkdb_serve_hosts
   roles:
   - role: rethinkdb_serve
   - { role: rethinkdb_sshtunnel, when: "rethinkdb_sshtunnel" }
-  handlers:
-  - include: handlers/main.yml
 
 - hosts: rethinkdb_proxy_hosts
   roles:
   - role: rethinkdb_proxy
   - { role: rethinkdb_sshtunnel, when: "rethinkdb_sshtunnel" }
-  handlers:
-  - include: handlers/main.yml

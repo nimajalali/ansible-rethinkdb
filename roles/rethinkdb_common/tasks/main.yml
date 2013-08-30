@@ -1,6 +1,7 @@
 ---
 - name: Get rethinkdb repo
-  get_url: dest=/tmp/rethinkdb.repo  url=http://download.rethinkdb.com/centos/6/x86_64/rethinkdb.repo
+  get_url: dest=/tmp/rethinkdb.repo  url=http://download.rethinkdb.com/centos/6/{{ ansible_machine }}/rethinkdb.repo
+  when: ansible_os_family == 'RedHat'
 
 - name: Install rethinkdb repo
   command: cp /tmp/rethinkdb.repo /etc/yum.repos.d/rethinkdb.repo
