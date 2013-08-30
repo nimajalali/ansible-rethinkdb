@@ -1,0 +1,14 @@
+ServerAliveInterval="{{rethinkdb_sshtunnel_server_alive_interval}}"
+ServerAliveCountMax="{{rethinkdb_sshtunnel_server_alive_count_max}}"
+StrictHostKeyChecking="yes"
+
+LocalUser="{{rethinkdb_user}}"
+IdentityFile="~/.ssh/id_rsa"
+
+RemoteUser="{{rethinkdb_user}}"
+RemoteHost="{{hostvars[item]['ansible_ssh_host']}}"
+RemotePort="{{hostvars[item]['ansible_ssh_port']|default(22)}}"
+
+ForwardPort=(
+    "L 127.0.0.1:{{hostvars[item]['rethinkdb_cluster_port']}}:127.0.0.1:{{hostvars[item]['rethinkdb_cluster_port']}}"
+)

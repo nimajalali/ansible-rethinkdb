@@ -40,7 +40,7 @@ pid-file={{ rethinkdb_pid_file }}
 ## Init script default: /var/lib/rethinkdb/<name>/ (where <name> is the name of this file without the extension)
 # directory=/var/lib/rethinkdb/default
 {% if rethinkdb_directory %}
-directory={{ rethinkdb_directory }}/{{ rethinkdb_instance_name }}
+directory={{ rethinkdb_directory }}/{{ inventory_hostname }}
 {% endif %}
 
 ### Network options
@@ -72,9 +72,9 @@ cluster-port={{ rethinkdb_cluster_port }}
 ## Default: none
 # join=example.com:29015
 {% if rethinkdb_cluster %}
-{% for host in groups['rethinkdb_servers'] %}
+{% for host in groups['rethinkdb_serve_hosts'] %}
 {% if host != inventory_hostname %}
-join=localhost:{{ hostvars[host]['rethinkdb_cluster_port'] }}
+join=127.0.0.1:{{ hostvars[host]['rethinkdb_cluster_port'] }}
 {% endif %}
 {% endfor %}
 {% elif rethinkdb_joins %}

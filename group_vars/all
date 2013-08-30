@@ -6,5 +6,8 @@ rethinkdb_group: rethinkdb
 
 rethinkdb_directory: /var/lib/rethinkdb/default
 
+rethinkdb_sshtunnel_server_alive_interval: 15
+rethinkdb_sshtunnel_server_alive_count_max: 3
+
 rethinkdb_cluster: false
 rethinkdb_sshtunnel: false

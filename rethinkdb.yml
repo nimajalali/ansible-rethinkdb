@@ -1,13 +1,11 @@
 ---
 - hosts: rethinkdb_all_hosts
-  vars_files: [ "group_vars/defaults.yml" ]
   roles:
   - role: rethinkdb_common
   handlers:
   - include: handlers/main.yml
 
 - hosts: rethinkdb_serve_hosts
-  vars_files: [ "group_vars/defaults.yml" ]
   roles:
   - role: rethinkdb_serve
   - { role: rethinkdb_sshtunnel, when: "rethinkdb_sshtunnel" }
@@ -15,7 +13,6 @@
   - include: handlers/main.yml
 
 - hosts: rethinkdb_proxy_hosts
-  vars_files: [ "group_vars/defaults.yml" ]
   roles:
   - role: rethinkdb_proxy
   - { role: rethinkdb_sshtunnel, when: "rethinkdb_sshtunnel" }

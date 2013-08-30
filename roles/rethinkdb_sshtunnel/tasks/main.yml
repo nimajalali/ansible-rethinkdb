@@ -30,14 +30,20 @@
   delegate_to: ${item}
   authorized_key: user={{ rethinkdb_user }} key="{{ pub_key.stdout }}"
   with_items: groups['rethinkdb_serve_hosts']
+  when: item != inventory_hostname
+
+- name: Touch the known_hosts file
+  command: touch /home/{{ rethinkdb_user }}/.ssh/known_hosts
 
 - name: Remove all rethinkdb_serve_hosts from known_hosts. Prevents multiple entries
   command: ssh-keygen -f /home/{{ rethinkdb_user }}/.ssh/known_hosts -R {{ hostvars[item]['ansible_ssh_host'] }}
   with_items: groups['rethinkdb_serve_hosts']
+  when: item != inventory_hostname
 
 - name: Add all rethinkdb_serve_hosts to known_hosts
   command: sh -c 'ssh-keyscan -H {{ hostvars[item]['ansible_ssh_host'] }} >> /home/{{ rethinkdb_user }}/.ssh/known_hosts'
   with_items: groups['rethinkdb_serve_hosts']
+  when: item != inventory_hostname
 
 - name: Set owner of user rethinkdb ssh directory
   file: path=/home/{{ rethinkdb_user }}/.ssh/ owner={{ rethinkdb_user }} group={{ rethinkdb_group }} state=directory recurse=yes
@@ -45,6 +51,20 @@
 - name: Enable rethinkdb user login
   command: chsh -s /bin/bash {{ rethinkdb_user }}
 
-- name: Create the ssh tunnel configuration
-  template: src=rethinkdb-tunnel.conf.j2 dest=/etc/init/rethinkdb-tunnel.conf
-  notify: restart rethinkdb
+- name: Create autossh directory
+  file: dest=/etc/autossh/ mode=755 state=directory
+
+- name: Create autossh configuration
+  template: src=autossh.conf.j2 dest=/etc/autossh/{{ item }}.conf
+  with_items: groups['rethinkdb_serve_hosts']
+  when: item != inventory_hostname
+
+- name: Copy the autossh start script
+  copy: src=autossh dest=/etc/init.d/autossh
+  notify: restart autossh
+
+- name: Set execute permission on autossh start script
+  file: dest=/etc/init.d/autossh mode=755 state=file
+
+- name: Ensure autossh is running automatically at boot time
+  action: command /sbin/chkconfig autossh on

@@ -1,3 +1,6 @@
 ---
 - name: restart rethinkdb
   service: name=rethinkdb state=restarted
+
+- name: restart autossh
+  service: name=autossh state=restarted
