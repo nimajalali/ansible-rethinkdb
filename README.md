@@ -21,3 +21,4 @@ TODO
 * Convert help file to wiki page in github
 * Support rethinkdb proxy deployments
 * Support other OS's
+* Add option to install nginx and setup a password protected proxy for rethinkdb's web interface
