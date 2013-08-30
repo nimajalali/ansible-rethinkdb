@@ -13,11 +13,8 @@ Create your own inventory file. Examples are included in the inventory_examples 
 
 Usage
 ================
-Quickstart  
-```ansible-playbook -i your_inventory_file rethinkdb.yml```
 
-Fireball  
-```ansible-playbook -i your_inventory_file rethinkdb_fireball.yml```
+```ansible-playbook -i your_inventory_file rethinkdb.yml```
 
 TODO
 =================
