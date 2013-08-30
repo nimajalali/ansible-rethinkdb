@@ -1,9 +1,3 @@
-
-# Global options for rethinkdb-proxy-servers.
-[rethinkdb-proxy-servers:vars]
-cluster=true
-sshtunnel=true
-
 ###############################
 ## RethinkDB options
 ###############################
