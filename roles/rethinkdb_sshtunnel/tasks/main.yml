@@ -24,7 +24,7 @@
   register: key_exists
 
 - name: Generate private/public key for ssh tunnel
-  command: ssh-keygen -f /home/rethinkdb/.ssh/id_rsa -t rsa -N ''
+  command: ssh-keygen -f /home/{{ rethinkdb_user }}/.ssh/id_rsa -t rsa -N ''
   when_string: ${key_exists.stdout} != "exists"
 
 - name: Copy public key
