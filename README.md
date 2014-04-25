@@ -16,9 +16,7 @@ Usage
 
 ```ansible-playbook -i your_inventory_file rethinkdb.yml```
 
-TODO
-=================
-* Convert help file to wiki page on github
-* Support rethinkdb proxy deployments
-* Support Ubuntu
-* Add option to install nginx and setup a password protected proxy for rethinkdb's web interface
+Other RethinkDB playbooks
+-------------------------
+
+- https://github.com/jprichardson/ansible-rethinkdb
