@@ -8,7 +8,7 @@
 
 - name: Create the rethinkdb data folder using the rethinkdb create command
   command: rethinkdb create --runuser {{ rethinkdb_user }} --rungroup {{ rethinkdb_group }} -d {{ rethinkdb_directory }}/{{ inventory_hostname }}
-  when_string: ${rethinkdb_directory_exists.stdout} != "exists"
+  when: ${rethinkdb_directory_exists.stdout} != "exists"
 
 - name: Create the rethinkdb config file
   template: src=rethinkdb.conf.j2 dest=/etc/rethinkdb/instances.d/{{ inventory_hostname }}.conf
